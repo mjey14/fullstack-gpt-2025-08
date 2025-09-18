@@ -28,12 +28,18 @@ class ChatCallbackHandler(BaseCallbackHandler):
         self.message += token
         self.message_box.markdown(self.message)
 
+with st.sidebar:
+    openai_api_key = st.text_input("Enter your OpenAI API key", type="password")
+    file = st.file_uploader(
+        "Upload a .txt .pdf or .docx file",
+        type=["pdf", "txt", "docx"],
+    )
+
 llm = ChatOpenAI(
-    temperature = 0.1,
+    temperature=0.1,
     streaming=True,
-    callbacks=[
-        ChatCallbackHandler()
-    ]
+    callbacks=[ChatCallbackHandler()],
+    openai_api_key=openai_api_key
 )
 
 def embed_file(file):
@@ -93,12 +99,6 @@ Use this chatbot to ask questions to an AI about your files!
 Upload your files on the sidebar.
 """
 )
-
-with st.sidebar:
-    file = st.file_uploader(
-        "Upload a .txt .pdf or .docx file",
-        type=["pdf", "txt", "docx"],
-    )
 
 if file:
     retriever = embed_file(file)
