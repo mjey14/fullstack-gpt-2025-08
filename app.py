@@ -35,12 +35,16 @@ with st.sidebar:
         type=["pdf", "txt", "docx"],
     )
 
-llm = ChatOpenAI(
-    temperature=0.1,
-    streaming=True,
-    callbacks=[ChatCallbackHandler()],
-    openai_api_key=openai_api_key
-)
+if openai_api_key:
+    llm = ChatOpenAI(
+        temperature=0.1,
+        streaming=True,
+        callbacks=[ChatCallbackHandler()],
+        openai_api_key=openai_api_key
+    )
+else:
+    st.warning("Please enter your OpenAI API key in the sidebar.")
+    st.stop()
 
 def embed_file(file):
     file_content = file.read()
