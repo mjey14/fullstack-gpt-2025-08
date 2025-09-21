@@ -22,8 +22,14 @@ output_parser = JsonOutputParser()
 
 @st.cache_data(show_spinner="Loading file...")
 def split_file(file):
+    import os
     file_content = file.read()
-    file_path = f"./.cache/quiz_files/{file.name}"
+    
+    # Create cache directory if it doesn't exist
+    cache_dir = "./.cache/quiz_files"
+    os.makedirs(cache_dir, exist_ok=True)
+    
+    file_path = f"{cache_dir}/{file.name}"
     with open(file_path, "wb") as f:
         f.write(file_content)
     splitter = CharacterTextSplitter.from_tiktoken_encoder(
